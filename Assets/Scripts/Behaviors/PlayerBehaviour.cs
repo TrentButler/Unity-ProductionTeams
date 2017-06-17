@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
+//BEGIN PLAYER REFACTOR
+//BREAK UP INTO:
+//  - MOVEMENT BEHAVIOUR
+//  - SHOOT BEHAVIOUR
+
 public class PlayerBehaviour : MonoBehaviour
 {
     #region //MEMEBER VARIABLES
@@ -11,9 +16,7 @@ public class PlayerBehaviour : MonoBehaviour
     public float PlayerHealth = 100;
     public float PlayerMaxHealth = 100;
     public float PlayerDamage = 25;
-    public GameObject Ammunition;
-    public float MovementSpeed = 20;
-    public float LookSpeed = 10;
+    public GameObject Ammunition;    
     public float BulletSpeed = 20;
     private Transform _bulletspawn;
     private Animator _animator;
@@ -25,7 +28,7 @@ public class PlayerBehaviour : MonoBehaviour
     public OnPlayerHealthChange onPlayerHealthChange;
     #endregion
 
-    Vector3 LookAround()
+    Vector3 Aim()
     {
         //RIGHT JOYSTICK CONTROLL
         var _hori = Input.GetAxis("HorizontalRightJoy");
@@ -38,22 +41,6 @@ public class PlayerBehaviour : MonoBehaviour
         _animator.SetFloat("AimMovement", Mathf.Abs(_hori) + Mathf.Abs(_vert));
 
         Vector3 _direction = new Vector3(_hori, 0, _vert);
-        return _direction.normalized;
-    }
-
-    Vector3 MoveAround()
-    {
-        //LEFT JOYSTICK CONTROLL
-        var h = Input.GetAxis("HorizontalLeftJoy");
-        var v = Input.GetAxis("VerticalLeftJoy");
-
-        //WSAD CONTROLL
-        //var h = Input.GetAxis("Horizontal");
-        //var v = Input.GetAxis("Vertical");
-        
-        _animator.SetFloat("WalkMovement", Mathf.Abs(h) + Mathf.Abs(v));
-
-        Vector3 _direction = new Vector3(h, 0, v);
         return _direction.normalized;
     }
     
@@ -150,28 +137,10 @@ public class PlayerBehaviour : MonoBehaviour
                 Shoot();
             }
 
-            if (LookAround() != Vector3.zero && canshoot)
+            if (Aim() != Vector3.zero && canshoot)
             {
                 Shoot();
             }
-
-            if (MoveAround() != Vector3.zero) //CHECK IF THE PLAYER IS MOVING
-            {
-                if (LookAround() == Vector3.zero) //CHECK IF THE PLAYER IS AIMING
-                {
-                    MovementSpeed = 20f;
-                    transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(MoveAround()), Time.deltaTime * LookSpeed);
-                }
-                else
-                    MovementSpeed = 2f;
-            }
-
-            if (LookAround() != Vector3.zero) // CHECKING IF THE ARROW INPUTS ARE ZERO, WILL LOCK PLAYER ROTATION ON RELEASE
-            {
-                transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(LookAround()), Time.deltaTime * LookSpeed);
-            }
-
-            transform.localPosition += MoveAround() * MovementSpeed * Time.deltaTime;            
         }
     }
 }

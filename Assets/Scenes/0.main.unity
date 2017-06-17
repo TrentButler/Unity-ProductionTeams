@@ -420,7 +420,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsCameraEnabled: 1
-  camY: 12
+  CameraRotationSpeed: 0
+  camX: 0
+  camY: 3
   camZ: -6
   ang: 45
 --- !u!114 &1527380566

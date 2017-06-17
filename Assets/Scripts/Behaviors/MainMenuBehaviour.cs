@@ -82,7 +82,5 @@ public class MainMenuBehaviour : MonoBehaviour
             _timer = 0.0f;
             return;
         }
-
-        Debug.Log(_timer);
     }
 }

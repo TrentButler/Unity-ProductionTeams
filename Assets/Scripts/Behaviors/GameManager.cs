@@ -213,15 +213,6 @@ public class GameManager : MonoBehaviour
                 return true;
             }
 
-            if(_enemies.Count > _enemyLimit)
-            {
-                var difference = _enemies.Count - _enemyLimit;
-                for(int i = difference; i >= 0; i--)
-                {
-                    _enemies.Remove(_enemies[i]);
-                }
-            }
-            
             if (Input.GetKey("joystick button 7")) //PAUSE THE GAME
             {
                 PauseGame();
@@ -308,7 +299,7 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        Populate();
+        //Populate();
         UpdateEnemies();
         GameLoop();
         UpdateUI();     
